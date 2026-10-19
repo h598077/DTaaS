@@ -22,8 +22,6 @@ services:
       - "${CLIENT_PORT:-4000}:4000"
       - "${LIBMS_PORT:-4001}:4001"
       - "${LOGGER_PORT:-4003}:4003"
-    networks:
-      - dtaas_shared
 
   docs:
     build: *devenv-build
@@ -33,8 +31,6 @@ services:
     volumes: *devenv-volumes
     ports:
       - "${DOCS_PORT:-8000}:8000"
-    networks:
-      - dtaas_shared
 
 volumes:
   client-node-modules:
@@ -42,7 +38,3 @@ volumes:
   logger-node-modules:
   dt-automation-node-modules:
   home-cache:
-
-networks:
-  dtaas_shared:
-    external: true
