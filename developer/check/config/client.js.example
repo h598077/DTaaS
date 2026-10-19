@@ -6,7 +6,7 @@ if (typeof window !== 'undefined') {
     REACT_APP_URL_DTLINK: '/lab',
     REACT_APP_URL_LIBLINK: '',
 
-    REACT_APP_CLIENT_ID: '1be55736756190b3ace4c2c4fb19bde386d1dcc748d20b47ea8cfb5935b8446c',
+    REACT_APP_CLIENT_ID: '1e794f5e3dfce08b6c0fc4eed81a54ce1ba09b0c61102445194b5109ac7d50d2a',
     REACT_APP_AUTH_AUTHORITY: 'https://gitlab.com/',
     REACT_APP_REDIRECT_URI: 'http://localhost/Library',
     REACT_APP_LOGOUT_REDIRECT_URI: 'http://localhost/',

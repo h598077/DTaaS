@@ -13,6 +13,10 @@ const tabs: ITabs[] = [
     label: 'Analyze',
     body: 'The analysis of digital twins requires running of digital twin script from user workspace. The execution results placed within data directory are processed by analysis scripts and results are placed back in the data directory. These scripts can either be executed from VSCode and graphical results or can be executed from VNC GUI.',
   },
+  {
+    label: 'RDT',
+    body: 'Create Ruless Digital Twins',
+  },
 ];
 
 export default tabs;

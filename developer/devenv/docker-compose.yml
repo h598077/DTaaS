@@ -1,8 +1,6 @@
 name: dtaas-devenv
 
 services:
-  # Long-running development shell. Attach with:
-  #   docker compose exec devenv zsh
   devenv:
     build: &devenv-build
       context: ../../
@@ -24,8 +22,9 @@ services:
       - "${CLIENT_PORT:-4000}:4000"
       - "${LIBMS_PORT:-4001}:4001"
       - "${LOGGER_PORT:-4003}:4003"
+    networks:
+      - dtaas_shared
 
-  # Live documentation preview, so mkdocs does not occupy the shell.
   docs:
     build: *devenv-build
     image: dtaas/devenv:latest
@@ -34,6 +33,8 @@ services:
     volumes: *devenv-volumes
     ports:
       - "${DOCS_PORT:-8000}:8000"
+    networks:
+      - dtaas_shared
 
 volumes:
   client-node-modules:
@@ -41,3 +42,7 @@ volumes:
   logger-node-modules:
   dt-automation-node-modules:
   home-cache:
+
+networks:
+  dtaas_shared:
+    external: true

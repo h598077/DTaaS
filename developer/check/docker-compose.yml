@@ -77,9 +77,11 @@ services:
   user1:
     image: intocps/workspace:main-56c6f68
     restart: unless-stopped
+    user: "0:0"
     volumes:
       - "./files/common:/workspace/common"
       - "./files/${USERNAME1}:/workspace"
+      - dtaas-rdt:/workspace/rdt    # 
     environment:
       - MAIN_USER=${USERNAME1}
     shm_size: 512m
@@ -145,3 +147,7 @@ networks:
     name: dtaas-frontend
   users:
     name: dtaas-users
+
+volumes:
+  dtaas-rdt:
+    external: true
