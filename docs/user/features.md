@@ -18,7 +18,8 @@ The DTaaS software platform offers:
 Each installation of the DTaaS platform includes
 the features shown in the following diagram.
 
-![Features](DTaaS-user-view.png)
+![Features](DTaaS-user-view.png#only-light)
+![Features](DTaaS-user-view-dark.png#only-dark)
 
 Every user gets a dedicated workspace.
 These workspaces are containerized Linux desktops.
@@ -33,7 +34,7 @@ The following tools are currently available:
 
 | Tool                   | Advantage                                                                                                                                           |
 | :--------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Jupyter Lab            | Create and use digital twins and their components in a web browser. All native JupyterLab use cases are supported.                                 |
+| Jupyter Lab            | Create and use digital twins and their components in a web browser. All native JupyterLab use cases are supported.                                  |
 | Jupyter Notebook       | Manage files and library assets in a web browser.                                                                                                   |
 | VS Code in the browser | A widely used IDE for software development. Digital twin assets can be developed in this environment.                                               |
 | ungit                  | An interactive git client for managing repositories in a web browser.                                                                               |

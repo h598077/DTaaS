@@ -1,4 +1,4 @@
-# 🐳 Docker Workflow for DTaaS
+# Docker Workflow for DTaaS
 
 Docker images are useful for development. Developers are advised
 to build the required images locally and use them during development.
@@ -12,9 +12,9 @@ The docker compose environment creates the following development scenario.
 
 ![developer](developer-docker.png)
 
-## 📁 Folder Structure
+## Folder Structure
 
-There are four Dockerfiles for building the containers:
+The Dockerfiles for building the containers are:
 
 - **client.dockerfile**: Dockerfile for building
   the client application container.
@@ -26,8 +26,14 @@ There are four Dockerfiles for building the containers:
   microservice container from source code.
 - **libms.npm.dockerfile**: Dockerfile for building the library
   microservice container from published npm package at npmjs.com.
-  This Dockerfile is only used during publishing. It is used neither
-  in the development builds nor in Github actions.
+  This Dockerfile is only for a manual build. It is used neither
+  in the development builds nor in Github actions, which publish
+  the library microservice image from **libms.dockerfile**.
+- **logger.dockerfile**: Dockerfile for building the logger
+  microservice container from source code. It is used in the
+  development builds and for publishing. Its entrypoint,
+  **logger-entrypoint.sh**, gives the mounted log and certs directories
+  to the `node` user before starting the service.
 
 In addition, there are docker compose and configuration files.
 
@@ -37,10 +43,10 @@ In addition, there are docker compose and configuration files.
 - **conf.dev** OAuth 2.0 configuration required by
   the Traefik forward-auth service
 
-## 🛠️ Build and Publish Docker Images
+## Build and Publish Docker Images
 
-The GitHub Actions workflows publish Docker images of the client website
-and libms to
+The GitHub Actions workflows publish Docker images of the client website,
+libms and logger-ms to
 [GitHub](https://github.com/orgs/INTO-CPS-Association/packages?repo_name=DTaaS)
 and
 [Docker Hub](https://hub.docker.com/u/intocps).
@@ -56,12 +62,14 @@ cd developer/check
 cp config/.env.example config/.env
 cp config/client.js.example config/client.js
 cp config/conf.dev.example config/conf.dev
-cp config/libms.dev.yaml.example config/libms.dev.yml
+cp config/libms.dev.yaml.example config/libms.dev.yaml
 sudo chown -R 1000:100 files/*
+mkdir -p logs/logger
+sudo chown -R 1000:1000 logs/logger
 docker compose --env-file config/.env build
 ```
 
-## 📦 Running Docker Containers
+## Running Docker Containers
 
 The following steps describe how to use the application with Docker.
 
@@ -75,18 +83,18 @@ This scenario is intended for software developers.
 The following configuration files require updating:
 
 1. **developer/check/config/.env** :
-  Refer to the [Docker installation
-  documentation](../../admin/dtaas/server/install.md) for
-   guidance on updating this configuration file.
+  Refer to the [server configuration
+  documentation](../../deploy/dtaas/docker/server/CONFIG.md#configenv---docker-compose-environment)
+   for guidance on updating this configuration file.
 1. **developer/check/config/conf.dev** :
-  Refer to the [Docker installation
-  documentation](../../admin/dtaas/server/install.md) for
-   guidance on updating this configuration file.
+  Refer to the [server configuration
+  documentation](../../deploy/dtaas/docker/server/CONFIG.md#configconfserver---traefik-forward-auth-rules)
+   for guidance on updating this configuration file.
 1. **developer/check/config/client.js** :
-   Refer to the [client configuration documentation](../../admin/client/config.md)
+   Refer to the [client configuration documentation](../../docs/admin/client/config.md)
    for guidance on updating this configuration file.
 1. **developer/check/config/libms.dev.yaml** :
-   Refer to the [library microservice configuration documentation](../../admin/servers/lib/docker.md)
+   Refer to the [library microservice configuration documentation](../../docs/admin/servers/lib/docker.md)
    for guidance on updating this configuration file.
 
 The docker commands need to be executed from the `developer/check` directory.
@@ -111,7 +119,7 @@ through the single page client now.
 Build and publish the docker images. This step is required only for
 the publication of images to Docker Hub.
 
-:stop_sign: This publishing step is managed
+Warning: This publishing step is managed
 only by project maintainers. Regular developers can skip this step.
 
 The DTaaS development team publishes reusable packages which are then
@@ -137,6 +145,8 @@ A brief explanation of the packages is given below.
 | dtaas-web | React web application | [docker hub](https://hub.docker.com/r/intocps/dtaas-web) and [github](https://github.com/INTO-CPS-Association/DTaaS/pkgs/container/dtaas-web) |
 | libms |Library microservice | [npmjs](https://www.npmjs.com/package/@into-cps-association/libms) and [github](https://github.com/INTO-CPS-Association/DTaaS/pkgs/npm/libms) |
 | | | [docker hub](https://hub.docker.com/r/intocps/libms) and [github](https://github.com/INTO-CPS-Association/DTaaS/pkgs/container/libms) |
+| logger-ms | Logger microservice | [npmjs](https://www.npmjs.com/package/@into-cps-association/logger-ms) and [github](https://github.com/INTO-CPS-Association/DTaaS/pkgs/npm/logger-ms) |
+| | | [docker hub](https://hub.docker.com/r/intocps/logger-ms) and [github](https://github.com/INTO-CPS-Association/DTaaS/pkgs/container/logger-ms) |
 | runner | REST API wrapper for multiple scripts/programs | [npmjs](https://www.npmjs.com/package/@into-cps-association/runner) and [github](https://github.com/INTO-CPS-Association/DTaaS/pkgs/npm/runner) |
 
 ### React Website
@@ -158,13 +168,16 @@ To test the react website container on localhost, please use
 
 ```bash
 docker run -d \
-  -v ${PWD}/client/config/client.js:/dtaas/client/build/env.js \
+  -v ${PWD}/developer/check/config/client.js:/dtaas/client/build/env.js \
   -p 4000:4000 intocps/dtaas-web:latest
 ```
 
 ### Library Microservice
 
-The Dockerfile of library microservice has `VERSION` argument.
+The Github actions publish the library microservice image built from
+**libms.dockerfile**. The commands below build it manually from the
+npm package instead.
+The **libms.npm.dockerfile** has `VERSION` argument.
 This argument helps pick the right package version from <http://npmjs.com>.
 
 ```sh
@@ -186,6 +199,37 @@ docker build --build-arg="VERSION=0.3.1" \
 To test the library microservice on localhost, please use
 
 ```bash
-docker run -d -v ${PWD}/files:/dtaas/libms/files \
+docker run -d -v ${PWD}/developer/check/files:/dtaas/libms/files \
   -p 4001:4001 intocps/libms:latest
 ```
+
+### Logger Microservice
+
+The logger microservice image is built from the source code
+with `logger.dockerfile`. Use the version in
+`servers/logger/package.json` as the image tag.
+
+```sh
+docker login -u <username> -p <password>
+docker build -t intocps/logger-ms:latest -f ./developer/check/logger.dockerfile .
+docker tag intocps/logger-ms:latest intocps/logger-ms:<version>
+docker push intocps/logger-ms:latest
+docker push intocps/logger-ms:<version>
+```
+
+To tag version 0.1.2 for example, use
+
+```sh
+docker tag intocps/logger-ms:latest intocps/logger-ms:0.1.2
+```
+
+To test the logger microservice on localhost, please use
+
+```bash
+mkdir logs
+sudo chown -R 1000:1000 logs
+docker run -d -v ${PWD}/logs:/dtaas/logger/logs \
+  -p 4003:4003 intocps/logger-ms:latest
+```
+
+The captured events are written to `logs/workflow-logs.jsonl`.

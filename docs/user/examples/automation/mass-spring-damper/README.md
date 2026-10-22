@@ -7,7 +7,7 @@ and shows how a co-simulation based DT can be used within DTaaS.
 
 ## Example Diagram
 
-![Mass Spring Damper System](mass-spring-damper_multibody_system.png)
+![Mass Spring Damper System](mass-spring-damper_multibody_system.png){.on-white}
 
 ## Example Structure
 
@@ -18,7 +18,8 @@ The second simulator calculates force $F_k$ given a displacement and speed of
 mass $m_1$. By coupling these simulators, the evolution of the position of
 the two masses is computed.
 
-![Mass Spring Damper Structure](dt-structure.png)
+![Mass Spring Damper Structure](../../workspace/mass-spring-damper/dt-structure.png#only-light)
+![Mass Spring Damper Structure](../../workspace/mass-spring-damper/dt-structure-dark.png#only-dark)
 
 ## Digital Twin Configuration
 

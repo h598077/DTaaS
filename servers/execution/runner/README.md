@@ -1,4 +1,4 @@
-# :runner: Runner
+# Runner
 
 A utility service for the safe execution of remote scripts and commands.
 Users launch this from the command line and the utility manages
@@ -10,17 +10,17 @@ Multiple runner instances can be active simultaneously on one machine.
 Commands are submitted via the REST API and executed on the host
 running the runner.
 
-:warning: Thanks for trying out this software.
+Warning: Thanks for trying out this software.
 This software is in early stages of development and is not
 recommended for production use. Each released package will have
 a working API and matching documentation in this README.
 However, there will be breaking changes in the API across each release
 until the package reaches version 1.0.0.
 
-:computer: The runner works on Linux and Windows. On Windows, it runs
-the PowerShell version of each script (see [Create Commands](#pen-create-commands)).
+The runner works on Linux and Windows. On Windows, it runs
+the PowerShell version of each script (see [Create Commands](#create-commands)).
 
-## :arrow_down: Install
+## Install
 
 ### NPM Registry
 
@@ -51,7 +51,7 @@ your Github username and the password is your Github
 In order for the npm to download the package, your personal access token
 needs to have _read:packages_ scope.
 
-## :gear: Configure
+## Configure
 
 The utility requires config specified in YAML format.
 A sample configuration is given below. Copy it into a file named
@@ -81,10 +81,10 @@ the `location`. The path to _runner.yaml_ can either be relative or
 absolute path. However, the `location` path is always relative path
 with respect to the path of _runner.yaml_ file.
 
-:warning: Ensure that the commands have execute permission
+Warning: Ensure that the commands have execute permission
 on Linux platforms.
 
-## :pen: Create Commands
+## Create Commands
 
 The runner requires commands / scripts to be run.
 These need to be placed in the `location` specified in
@@ -97,7 +97,7 @@ All other command execution requests result in invalid status.
 
 On Windows, each command needs a PowerShell script with the `.ps1`
 extension, for example _create.ps1_ for the _create_ command.
-The runner executes it with `powershell.exe -ExecutionPolicy Bypass -File`.
+The runner executes it with `powershell.exe -NoProfile -ExecutionPolicy Bypass -File`.
 A directory can hold both versions of a script, so that the same
 commands work on Linux and Windows.
 
@@ -105,7 +105,7 @@ The `DOCKER.md` file in the
 [runner source](https://github.com/INTO-CPS-Association/DTaaS/tree/feature/distributed-demo/servers/execution/runner)
 describes running the runner in a docker container.
 
-## :rocket: Use
+## Use
 
 Display help.
 
@@ -146,7 +146,7 @@ for these two sources are:
 | :--------------------- | :---------- | :---------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------ |
 | localhost:port         | POST        | Returns the execution status of command                                 | Executes the command provided. All the commands sent in the right JSON format gets stored in _history_. |
 | localhost:port         | GET         | Returns the execution status of the last command sent via POST request. |                                                                                                         |
-| localhost:port/history | GET         | Returns the array of valid POST requests received so far.               |                                                                                                         |
+| localhost:port/history | GET         | Returns the array of well-formed POST requests received so far.         |                                                                                                         |
 
 #### POST Request to /
 
@@ -236,7 +236,7 @@ Both valid and invalid commands are recorded in the history.
 ]
 ```
 
-## :balance_scale: License
+## License
 
 This software is owned by
 [The INTO-CPS Association](https://into-cps.org/)

@@ -1,5 +1,6 @@
 <!-- markdownlint-disable MD041 -->
-![DTaaS logo](dtaas.png)
+![DTaaS logo](dtaas-logo-full-192h.png#only-light)
+![DTaaS logo](dtaas-logo-full-white-192h.png#only-dark)
 
 This document explains how to change the username and password of the
 localhost **DTaaS** installation.
@@ -30,6 +31,12 @@ database:
 
 This keeps the user-scoped DTaaS routes in line with the OIDC identity
 claims.
+
+Changing `DEFAULT_USER` changes only the workspace URL route
+(`/<DEFAULT_USER>`) and the `MAIN_USER` of the workspace container.
+The workspace files still come from `files/user`, because
+`docker-compose.yml` mounts `./files/user` at `/workspace`; do not
+rename that directory.
 
 ## Run
 

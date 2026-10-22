@@ -4,19 +4,19 @@ This guide explains how to deploy the workspace container with Traefik reverse
 proxy, OAuth2 authentication, and TLS/HTTPS support for secure multi-user
 deployments.
 
-## ❓ Prerequisites
+## Prerequisites
 
-✅ Docker Engine v27 or later  
+Docker Engine v27 or later  
 
-✅ Docker Compose v2.x  
+Docker Compose v2.x  
 
-✅ Sufficient system resources (at least 1GB RAM per workspace instance)  
+Sufficient system resources (at least 1GB RAM per workspace instance)  
 
-✅ Valid TLS certificates (production) or self-signed certs (testing)
+Valid TLS certificates (production) or self-signed certs (testing)
 
-✅ Domain name pointing to the server (production) or localhost (testing)
+Domain name pointing to the server (production) or localhost (testing)
 
-## 🗒️ Design
+## Design
 
 ```text
 User Request → Traefik → Forward Auth → Keycloak (OIDC)
@@ -28,7 +28,9 @@ The `docker-compose.yml` file provides a production-ready setup with:
 
 - **Traefik** reverse proxy with TLS termination (ports 80, 443)
 - **Automatic HTTP to HTTPS redirect**
+- **Keycloak** identity provider, served under `/auth`
 - **OAuth2 authentication** via traefik-forward-auth
+- the **DTaaS web client**
 - **Multiple workspace instances** (user1, user2) behind authentication
 - **Secure communication** with TLS certificates
 - **Workspace containers** (for each user) using the
@@ -37,7 +39,7 @@ The `docker-compose.yml` file provides a production-ready setup with:
   auth, and user workspaces
 - **Two Docker networks**: `dtaas-frontend` and `dtaas-users`
 
-## ⚙️ Initial Configuration
+## Initial Configuration
 
 Please follow the steps in [`CONFIGURATION.md`](CONFIGURATION.md)
 for creating suitable configuration.
@@ -57,7 +59,7 @@ cp -R files/template files/<USERNAME2>
 sudo chown -R 1000:100 files
 ```
 
-## :rocket: Start Services
+## Start Services
 
 To start all services with TLS:
 
@@ -69,11 +71,12 @@ This will:
 
 1. Start Traefik reverse proxy with TLS on ports 80 (HTTP → HTTPS redirect)
    and 443 (HTTPS)
-2. Start traefik-forward-auth service for OAuth2 authentication
-3. Start workspace instances for user1 and user2, protected by
+2. Start Keycloak and the DTaaS web client
+3. Start traefik-forward-auth service for OAuth2 authentication
+4. Start workspace instances for user1 and user2, protected by
    authentication
 
-## :technologist: Accessing Workspaces
+## Accessing Workspaces
 
 Once all services are running, access the workspaces through Traefik with HTTPS:
 
@@ -127,7 +130,7 @@ The endpoint values are dynamically populated with the user's username from the
 `MAIN_USER` environment variable. This variable corresponds to `USERNAME1` of
 `config/.env` file.
 
-## 🔒 Authentication Flow
+## Authentication Flow
 
 1. User attempts to access a workspace URL
 2. Traefik forwards the request to traefik-forward-auth
@@ -137,7 +140,7 @@ The endpoint values are dynamically populated with the user's username from the
 6. traefik-forward-auth exchanges code for token and creates session
 7. User is redirected to original URL and gains access
 
-## 🛑 Stopping Services
+## Stopping Services
 
 To stop all services:
 
@@ -151,7 +154,7 @@ To stop and remove volumes:
 docker compose --env-file config/.env down -v
 ```
 
-## 🔧 Customisation
+## Customisation
 
 ### Adding More Users
 
@@ -175,7 +178,7 @@ To add additional workspace instances, add a new service in `docker-compose.yml`
       - users
 ```
 
-Add the desired `USERNAME3` variable in [`config/.env`](config/.env):
+Add the desired `USERNAME3` variable in `config/.env`:
 
 ```bash
 # Username Configuration
@@ -186,7 +189,7 @@ USERNAME2=user2
 USERNAME3=user3 # <--- replace "user3" with your desired username
 ```
 
-Add Forward Auth config for user3 in [`forward-auth-conf`](./config/forward-auth-conf):
+Add Forward Auth config for user3 in `config/forward-auth-conf`:
 
 ```txt
 
@@ -210,7 +213,7 @@ Bring up the user workspace.
 docker compose --env-file config/.env up -d --force-recreate user3
 ```
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Certificate Issues
 
@@ -231,7 +234,7 @@ docker compose --env-file config/.env up -d --force-recreate user3
 
 - Verify OAuth2 callback URL matches `https://intocps.org/_oauth`
 - Check `SERVER_DNS` environment variable is set correctly
-- Ensure `COOKIE_DOMAIN` matches the domain
+- Ensure `SERVER_DNS` is correct (`COOKIE_DOMAIN` is derived from it)
 - Verify OAuth2 application is approved and active
 
 ### Port Conflicts
@@ -244,7 +247,7 @@ docker compose --env-file config/.env up -d --force-recreate user3
 - Stop conflicting services
 - Or modify port mappings in compose file (not recommended for production)
 
-## 📚 Additional Resources
+## Additional Resources
 
 - [Traefik Documentation](https://doc.traefik.io/traefik/)
 - [Traefik Forward Auth](https://github.com/thomseddon/traefik-forward-auth)

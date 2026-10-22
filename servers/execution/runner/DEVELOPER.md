@@ -1,9 +1,9 @@
-# :runner: Developer Instructions
+# Developer Instructions
 
 This microservice needs a configuration file and a directory of scripts.
 Please see [README](./README.md) for this information.
 
-## :gear: Configure
+## Configure
 
 The `config` directory has two sample configuration files:
 
@@ -29,20 +29,20 @@ The `test/data/scripts` directory has a bash script and a PowerShell
 configuration and these scripts into the runner directory before they
 run and delete them afterwards.
 
-## :hammer_and_wrench: Developer Commands
+## Developer Commands
 
 ```bash
 yarn install    # Install dependencies for the microservice
 yarn syntax     # Analyze code for errors and style issues
-yarn format     #format .ts[x] and .js[x] files with prettier
+yarn format     # Format .ts, .tsx, .css and .scss files with prettier
 yarn graph      # Generate dependency graphs in the code
-yarn build      # Compile ES6 to ES5 and copy JS files to build/ directory
+yarn build      # Compile TypeScript into the dist/ directory
 yarn test       # Run tests
 yarn test:e2e   # Run only end-to-end tests
 yarn test:nocov # Run the tests but do not report coverage
 yarn test:watchAll # Watch changes in test/ and run the tests
 yarn start      # Start the application
-yarn clean      # Deletes directories "build", "coverage", and "dist"
+yarn clean      # Deletes "build", "node_modules", "coverage", "dist" and graph files
 ```
 
 ### On Filenames in Tests
@@ -51,7 +51,7 @@ The jest and nestjs combination can not detect tests in files
 with _config_ in their names. Hence, the config word has been
 replaced with _options_ in the names of test files.
 
-## :package: :ship: NPM package
+## NPM package
 
 The package version is hardcoded as `PACKAGE_VERSION: string` in
 [CLI code](src/config/commander.ts). This package version needs to be
@@ -61,7 +61,7 @@ fails if the two versions differ.
 ### Github Package Registry
 
 The Github actions workflow of
-[lib microservice](../../../.github/workflows/runner.yml) publishes the **runner**
+[runner](../../../.github/workflows/runner.yml) publishes the **runner**
 into
 [packages](https://github.com/orgs/INTO-CPS-Association/packages?repo_name=DTaaS).
 
@@ -89,7 +89,7 @@ yarn publish #increments version, publishes to registry and adds a git tag
 npm unpublish  --registry http://localhost:4873/ @into-cps-association/runner@0.0.2
 ```
 
-## :rocket: Access the service
+## Access the service
 
 ## Service Endpoint
 

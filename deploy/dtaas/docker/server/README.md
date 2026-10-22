@@ -1,6 +1,7 @@
 # DTaaS — Server Deployment (External GitLab)
 
-![DTaaS logo](dtaas.png)
+![DTaaS logo](dtaas-logo-full.svg#gh-light-mode-only)
+![DTaaS logo](dtaas-logo-full-white.svg#gh-dark-mode-only)
 
 Thank you for downloading **Digital Twin as a Service**.
 
@@ -16,14 +17,20 @@ For a full configuration reference, see [CONFIG.md](CONFIG.md).
 This package deploys DTaaS with Traefik, OAuth forward-auth, and
 multiple user workspaces.
 
-<img src="server.png" alt="DTaaS on Server" width="600px" />
+![DTaaS on Server](server.png)
+
+A path such as `/user1` is the URL route of that service, for example
+`http://intocps.org/user1`.
+The thick arrow is the forward-auth check: Traefik asks
+traefik-forward-auth to authorise each request before it routes it.
 
 The `docker-compose.yml` starts the following services:
 
 | Service | Purpose |
 | :--- | :--- |
-| **traefik** | Reverse proxy with TLS termination |
+| **traefik** | Reverse proxy over HTTP (port 80) |
 | **client** | DTaaS React frontend |
+| **logger-ms** | Logger microservice |
 | **user1 / user2** | JupyterLab user workspaces |
 | **libms** | Library management microservice |
 | **traefik-forward-auth** | OAuth 2.0 authorisation middleware |
@@ -73,6 +80,14 @@ cp -R files/template files/<USERNAME2>
 sudo chown -R 1000:100 files/*
 ```
 
+The logger microservice writes its events to `logs/logger`. Create the
+directory and give it to uid 1000, the user that runs the logger:
+
+```bash
+mkdir -p logs/logger
+sudo chown -R 1000:1000 logs/logger
+```
+
 ### 3. Start Services
 
 ```bash
@@ -97,10 +112,10 @@ docker compose --env-file config/.env up -d --force-recreate client traefik-forw
 
 | URL | Expected result |
 | :--- | :--- |
-| `https://<SERVER_DNS>` | DTaaS web interface |
-| `https://<SERVER_DNS>/user1` | User 1 workspace after sign-in |
-| `https://<SERVER_DNS>/user2` | User 2 workspace after sign-in |
-| `https://<SERVER_DNS>/lib` | Library service |
+| `http://<SERVER_DNS>` | DTaaS web interface |
+| `http://<SERVER_DNS>/user1` | User 1 workspace after sign-in |
+| `http://<SERVER_DNS>/user2` | User 2 workspace after sign-in |
+| `http://<SERVER_DNS>/lib` | Library service |
 
 ## Stop
 
@@ -112,18 +127,18 @@ docker compose --env-file config/.env down
 
 ```text
 .
-|- certs/                 # TLS certificates (fullchain.pem, privkey.pem)
 |- config/
 |  |- .env                # Docker Compose environment variables
 |  |- conf.server         # Traefik forward-auth authorisation rules
 |  |- client.js           # DTaaS React client configuration
 |  |- .env.example
 |  |- conf.server.example
-|  |- client.js.example
-|  \- tls.yml            # Traefik TLS provider configuration
+|  \- client.js.example
 |- files/
 |  |- common/             # Shared files across all workspaces
 |  \- template/           # sample user workspace files
+|- logs/
+|  \- logger/             # Logger microservice events
 |- docker-compose.yml     # Service definitions
 |- CONFIG.md              # Detailed configuration reference
 \- README.md              # This file

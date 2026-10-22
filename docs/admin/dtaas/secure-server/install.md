@@ -1,5 +1,6 @@
 <!-- markdownlint-disable MD041 -->
-![DTaaS logo](dtaas.png)
+![DTaaS logo](dtaas-logo-full-192h.png#only-light)
+![DTaaS logo](dtaas-logo-full-white-192h.png#only-dark)
 
 This guide installs a **secure, multi-user DTaaS deployment** that uses
 an **external GitLab instance** for OAuth 2.0 authorisation.
@@ -15,7 +16,13 @@ For the full configuration reference, see [config.md](config.md).
 This package deploys DTaaS with Traefik, OAuth forward-auth and
 two user workspaces.
 
-<img src="server.png" alt="DTaaS on Server" width="600px" />
+![DTaaS on Server](server.png#only-light)
+![DTaaS on Server](server-dark.png#only-dark)
+
+A path such as `/user1` is the URL route of that service, for example
+`https://intocps.org/user1`.
+The thick arrow is the forward-auth check: Traefik asks
+traefik-forward-auth to authorise each request before it routes it.
 
 The `docker-compose.yml` starts the following services:
 
@@ -74,6 +81,14 @@ cp -R files/template files/<USERNAME2>
 sudo chown -R 1000:100 files/*
 ```
 
+The logger microservice writes its events to `logs/logger`. Create the
+directory and give it to uid 1000, the user that runs the logger:
+
+```bash
+mkdir -p logs/logger
+sudo chown -R 1000:1000 logs/logger
+```
+
 ### 3. Add TLS Certificates
 
 ```bash
@@ -129,19 +144,21 @@ docker compose --env-file config/.env down
 
 ```text
 .
-|- certs/                 # TLS certificates (fullchain.pem, privkey.pem)
-|- config/
-|  |- .env                # Docker Compose environment variables
-|  |- conf.server         # Traefik forward-auth authorisation rules
-|  |- client.js           # DTaaS React client configuration
-|  |- .env.example
-|  |- conf.server.example
-|  |- client.js.example
-|  \- tls.yml            # Traefik TLS provider configuration
-|- files/
-|  |- common/             # Shared files across all workspaces
-|  \- template/           # sample user workspace files
-|- docker-compose.yml     # Service definitions
-|- CONFIG.md              # Detailed configuration reference
+| - certs/                 # TLS certificates (fullchain.pem, privkey.pem) |
+| - config/                                                                |
+|                                                                          |
+|                                                                          |
+|                                                                          |
+|                                                                          |
+|                                                                          |
+|                                                                          |
+| \- tls.yml            # Traefik TLS provider configuration               |
+| - files/                                                                 |
+|                                                                          |
+| \- template/           # sample user workspace files                     |
+| - logs/                                                                  |
+| \- logger/             # Logger microservice events                      |
+| - docker-compose.yml     # Service definitions                           |
+| - CONFIG.md              # Detailed configuration reference              |
 \- README.md              # This file
 ```

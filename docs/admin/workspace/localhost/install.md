@@ -1,5 +1,6 @@
 <!-- markdownlint-disable MD041 -->
-![DTaaS logo](dtaas.png)
+![DTaaS logo](dtaas-logo-full-192h.png#only-light)
+![DTaaS logo](dtaas-logo-full-white-192h.png#only-dark)
 
 ## Install
 
@@ -14,7 +15,11 @@ page.
 
 The installation setup is shown here.
 
-<img src="localhost.png" alt="DTaaS Localhost" width="600px" />
+![DTaaS Localhost](localhost.png#only-light)
+![DTaaS Localhost](localhost-dark.png#only-dark)
+
+A path such as `/user` is the URL route of that service, for example
+`http://localhost/user`.
 
 ## Prerequisites
 
@@ -31,6 +36,13 @@ Copy the example configuration files first:
 ```bash
 cp config/.env.example config/.env
 cp config/dex-config.yaml.example config/dex-config.yaml
+```
+
+The workspace container runs as uid 1000 and gid 100. Give it ownership
+of the user files it mounts:
+
+```bash
+sudo chown -R 1000:100 files
 ```
 
 Start the demo:

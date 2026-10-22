@@ -8,7 +8,13 @@ GitLab.
 
 The diagram shows the intended installation.
 
-![GitLab Runner Integration](gitlab-integrated-runner.png)
+![GitLab Runner Integration](gitlab-integrated-runner.png#only-light)
+![GitLab Runner Integration](gitlab-integrated-runner-dark.png#only-dark)
+
+A path such as `/user1` is the URL route of that service, for example
+`https://intocps.org/user1`.
+The thick arrow is the forward-auth check: Traefik asks
+traefik-forward-auth to authorise each request before it routes it.
 
 There are two installation scenarios:
 
@@ -17,6 +23,12 @@ There are two installation scenarios:
 1. __Server Installation__: the integrated runner works with a GitLab
    instance on a production server. That server may be a remote machine
    rather than the host, and may use TLS with a self-signed certificate.
+
+In a server installation, GitLab can run on a second server, and the
+runners on further remote servers, as the diagram shows.
+
+![GitLab and runners on separate servers](gitlab-runner-two-servers.png#only-light)
+![GitLab and runners on separate servers](gitlab-runner-two-servers-dark.png#only-dark)
 
 The steps below set up an integrated runner that can execute digital
 twins from the Digital Twins Preview Page.
@@ -92,11 +104,15 @@ can communicate. `deploy/services/runner/runner-config.toml` contains
 this template:
 
 ```toml
+concurrent = 20
+
 [[runners]]
   name = "dtaas-runner-1"
+  description = "dtaas-runner-1"
   url = "https://intocps.org/gitlab/" # Edit this
   token = "xxx" # Edit this
   executor = "docker"
+  request_concurrency = 10
   [runners.docker]
     tls_verify = false
     image = "ruby:2.7"

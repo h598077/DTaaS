@@ -1,10 +1,10 @@
-# :books: DTaaS Research Overview
+# DTaaS Research Overview
 
 This document summarises the research behind the DTaaS platform for
 code contributors who need to understand the design rationale, the
 architectural decisions and the intended evolution of the system.
 
-## 1. :bulb: Introduction
+## 1. Introduction
 
 A digital twin is a software representation of a physical asset that
 stays connected to its real-world counterpart through data exchange.
@@ -20,13 +20,14 @@ and scripts) and services. Users compose these assets into digital twin
 configurations that can be executed, monitored and evolved
 independently.
 
-![DT asset relationship](research-overview/dt-assets-relationship.png)
+![DT asset relationship](research-overview/dt-assets-relationship.png#only-light)
+![DT asset relationship](research-overview/dt-assets-relationship-dark.png#only-dark)
 
 The platform targets operability: creating, configuring, executing,
 monitoring and evolving twins in long-running environments. This sets
 DTaaS apart from simulation-only tools and pure modelling frameworks.
 
-## 2. :dart: Requirements
+## 2. Requirements
 
 Eight requirements drive the platform design:
 
@@ -50,9 +51,10 @@ include food fermentation process control, indoor climate management
 for firefighter training and structural health monitoring of civil
 infrastructure.
 
-## 3. :building_construction: System Architecture
+## 3. System Architecture
 
-![System Architecture](research-overview/system-architecture.png)
+![System Architecture](research-overview/system-architecture.png#only-light)
+![System Architecture](research-overview/system-architecture-dark.png#only-dark)
 
 The architecture divides the platform into four concern areas:
 
@@ -79,9 +81,10 @@ implemented architecture in detail.
 
 ![Implementation Status](research-overview/implementation-status.png)
 
-## 4. :bust_in_silhouette: User View
+## 4. User View
 
-![DTaaS user view](research-overview/dtaas-userview.png)
+![DTaaS user view](research-overview/dtaas-userview.png#only-light)
+![DTaaS user view](research-overview/dtaas-userview-dark.png#only-dark)
 
 Users see DTaaS as a single web interface for workspace operations,
 asset browsing, digital twin execution and result exploration. Each
@@ -90,11 +93,13 @@ the common library. The platform supports both class-level twin
 definitions (reusable templates) and instance-level twins (bound to
 specific physical assets).
 
-![DT class and instance](research-overview/dtaas-class-instance.png)
+![DT class and instance](research-overview/dtaas-class-instance.png#only-light)
+![DT class and instance](research-overview/dtaas-class-instance-dark.png#only-dark)
 
-## 5. :arrows_counterclockwise: Lifecycle-Driven Engineering
+## 5. Lifecycle-Driven Engineering
 
-![Lifecycle Phases on DTaaS](research-overview/lifecycle-phases.png)
+![Lifecycle Phases on DTaaS](research-overview/lifecycle-phases.png#only-light)
+![Lifecycle Phases on DTaaS](research-overview/lifecycle-phases-dark.png#only-dark)
 
 Lifecycle coverage is a core requirement. The platform supports the
 create, manage, execute and stop phases, with iterative
@@ -106,9 +111,10 @@ The lifecycle model assumes that digital twins evolve: models are
 updated as physical assets change, new data sources are integrated, and
 execution configurations are refined based on operational experience.
 
-## 6. :gear: DevOps and Federation
+## 6. DevOps and Federation
 
-![DevOps with GitLab](research-overview/devops.png)
+![DevOps with GitLab](research-overview/devops.png#only-light)
+![DevOps with GitLab](research-overview/devops-dark.png#only-dark)
 
 GitLab-backed DevOps automation is a core platform capability.
 Repository structure, pipeline triggers and OAuth configuration are
@@ -122,7 +128,8 @@ Related recordings:
 - [DTaaS DevOps workflows](https://odin.cps.digit.au.dk/into-cps/dtaas/assets/videos/20250712-DTaaS_DevOps_workflows.mov)
 - [DTaaS and DevOps](https://odin.cps.digit.au.dk/into-cps/dtaas/assets/videos/20250502_DTaaS-and-DevOps.mp4)
 
-![Federated DTaaS](research-overview/federated-dtaas.png)
+![Federated DTaaS](research-overview/federated-dtaas.png#only-light)
+![Federated DTaaS](research-overview/federated-dtaas-dark.png#only-dark)
 
 The federation extension lets multiple DTaaS instances discover and
 reuse each other's assets across organisational boundaries. Federated
@@ -134,11 +141,13 @@ Related recording:
 
 - [Federated DTaaS video](https://odin.cps.digit.au.dk/into-cps/dtaas/assets/videos/20250502_Federated-DTaaS.mp4)
 
-![User interactions in Federated DTaaS](research-overview/user-interaction-in-federated-DTaaS.png)
+![User interactions in Federated DTaaS](research-overview/user-interaction-in-federated-DTaaS.png#only-light)
+![User interactions in Federated DTaaS](research-overview/user-interaction-in-federated-DTaaS-dark.png#only-dark)
 
-## 7. :bridge_at_night: Application: Structural Health Monitoring
+## 7. Application: Structural Health Monitoring
 
-![SHM DT Workflow](research-overview/shm-dt-workflow.png)
+![SHM DT Workflow](research-overview/shm-dt-workflow.png#only-light)
+![SHM DT Workflow](research-overview/shm-dt-workflow-dark.png#only-dark)
 
 Structural health monitoring (SHM) of civil infrastructure shows DTaaS
 used to integrate specialised engineering workflows. In this domain,
@@ -154,7 +163,7 @@ the calibrated model drives damage prognosis and remaining useful life
 estimation. Domain specialists build such workflows from reusable
 building blocks and keep their existing tools.
 
-## :compass: Guidance for Contributors
+## Guidance for Contributors
 
 When implementing or reviewing DTaaS changes:
 
@@ -175,7 +184,7 @@ Anti-patterns to avoid:
   convenience.
 - Treating DevOps and federation behaviour as optional.
 
-## :page_facing_up: References
+## References
 
 The research behind DTaaS is documented in the following papers.
 

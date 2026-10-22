@@ -121,7 +121,7 @@ Place these TLS certificate files in `certs/`:
 
 ```text
 certs/
-|- fullchain.pem   # Public certificate or certificate chain
+| - fullchain.pem   # Public certificate or certificate chain |
 \- privkey.pem     # Private key
 ```
 
@@ -134,8 +134,8 @@ its `/workspace` volume. All workspaces share `files/common/`.
 
 ```text
 files/
-|- common/    # Shared files (mounted to /workspace/common)
-|- user1/     # User 1 workspace files
+| - common/    # Shared files (mounted to /workspace/common) |
+| - user1/     # User 1 workspace files                      |
 \- user2/     # User 2 workspace files
 ```
 
@@ -144,6 +144,17 @@ Create the user directories:
 ```bash
 cp -R files/template files/<USERNAME>
 sudo chown -R 1000:100 files/*
+```
+
+## logs - Logger Microservice Events
+
+The logger microservice writes the captured events to
+`logs/logger/workflow-logs.jsonl`. Create the directory and give it to
+uid 1000, the user that runs the logger:
+
+```bash
+mkdir -p logs/logger
+sudo chown -R 1000:1000 logs/logger
 ```
 
 ## OAuth 2.0 Application Setup

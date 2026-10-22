@@ -21,6 +21,7 @@ For the quick-start installation guide, see [README.md](README.md).
     - [Important Rules](#important-rules)
   - [certs - TLS Certificates](#certs---tls-certificates)
   - [files - User Workspace Directories](#files---user-workspace-directories)
+  - [logs - Logger Microservice Events](#logs---logger-microservice-events)
   - [OAuth 2.0 Application Setup](#oauth-20-application-setup)
     - [DTaaS Client Authorization (React Frontend)](#dtaas-client-authorization-react-frontend)
     - [DTaaS Server Authorization (Traefik Forward-Auth)](#dtaas-server-authorization-traefik-forward-auth)
@@ -62,7 +63,7 @@ These are set from the external GitLab OAuth 2.0 applications.
 
 | Variable | Used by |
 | :--- | :--- |
-| `SERVER_DNS` | traefik, client, user1, user2, libms, traefik-forward-auth |
+| `SERVER_DNS` | client, logger-ms, user1, user2, libms, traefik-forward-auth |
 | `USERNAME1` / `USERNAME2` | user1, user2 (routing and workspace volumes) |
 | `OAUTH_URL` | traefik-forward-auth (authorize, token, userinfo endpoints) |
 | `OAUTH_CLIENT_ID` / `OAUTH_CLIENT_SECRET` | traefik-forward-auth |
@@ -93,6 +94,7 @@ cp config/client.js.example config/client.js
 | `REACT_APP_REDIRECT_URI` | `https://intocps.org/Library` | Redirect URI after sign-in |
 | `REACT_APP_LOGOUT_REDIRECT_URI` | `https://intocps.org/` | Redirect URI after sign-out |
 | `REACT_APP_GITLAB_SCOPES` | `openid profile read_user read_repository api` | Requested OAuth scopes |
+| `LOGGER_URL` | `https://intocps.org/logger` | URL of the logger service |
 
 ## config/conf.server - Traefik Forward-Auth Rules
 
@@ -168,6 +170,17 @@ Create user directories:
 ```bash
 cp -R files/template files/<USERNAME>
 sudo chown -R 1000:100 files/*
+```
+
+## logs - Logger Microservice Events
+
+The logger microservice writes the captured events to
+`logs/logger/workflow-logs.jsonl`. Create the directory and give it to
+uid 1000, the user that runs the logger:
+
+```bash
+mkdir -p logs/logger
+sudo chown -R 1000:1000 logs/logger
 ```
 
 ## OAuth 2.0 Application Setup

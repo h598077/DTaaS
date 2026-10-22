@@ -59,7 +59,7 @@ Unzip the **dtaas-localhost-xx.zip** package, which contains the
 installation files. This scenario uses **GitLab OAuth** for
 authentication and needs a GitLab account on <https://gitlab.com>.
 
-![DTaaS Localhost](localhost.png)
+![DTaaS Localhost](localhost.png){.on-white}
 
 ### 1.1 Configuration
 
@@ -102,6 +102,14 @@ cp -R files/template files/<DEFAULT_USER>
 sudo chown -R 1000:100 files/*
 ```
 
+The logger microservice writes its events to `logs/logger`. Create the
+directory and give it to uid 1000, the user that runs the logger:
+
+```bash
+mkdir -p logs/logger
+sudo chown -R 1000:1000 logs/logger
+```
+
 ### 1.6 Create the Portainer Stack
 
 ![Portainer Stacks](dtaas-stack-create.png)
@@ -140,7 +148,7 @@ installation files.
 This scenario uses **Dex** as a local identity provider.
 It needs no external account and comes with default credentials.
 
-![Workspace Localhost](localhost.png)
+![Workspace Localhost](localhost.png){.on-white}
 
 ### 2.1 Configuration
 

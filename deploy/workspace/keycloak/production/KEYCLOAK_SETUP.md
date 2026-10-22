@@ -5,11 +5,11 @@ the DTaaS workspace deployment.
 
 ## Key Benefits
 
-✅ **Standards-Based**: Uses OIDC/OAuth2 standards
+**Standards-Based**: Uses OIDC/OAuth2 standards
 
-✅ **Enterprise-Ready**: Supports SSO, MFA, user federation
+**Enterprise-Ready**: Supports SSO, MFA, user federation
 
-✅ **Minimal Changes**: Environment-variable based configuration
+**Minimal Changes**: Environment-variable based configuration
 
 ## Overview
 
@@ -45,6 +45,10 @@ Keycloak-specific environment variables are:
 | `KEYCLOAK_CLIENT_SECRET` | OIDC client secret | `<from-Keycloak>` |
 | `KEYCLOAK_ISSUER_URL` | OIDC issuer URL | `https://intocps.org/auth/realms/dtaas` |
 
+`KEYCLOAK_REALM` is informational: `docker-compose.yml` does not use
+it. The realm that DTaaS uses is the one named at the end of
+`KEYCLOAK_ISSUER_URL` (`/realms/<realm>`).
+
 Edit Keycloak configuration in `config/.env`:
 
 ```bash
@@ -52,7 +56,7 @@ Edit Keycloak configuration in `config/.env`:
 KEYCLOAK_ADMIN=admin
 KEYCLOAK_ADMIN_PASSWORD=changeme
 
-# Keycloak Realm
+# Keycloak Realm (informational; the realm in KEYCLOAK_ISSUER_URL is used)
 KEYCLOAK_REALM=dtaas
 
 # Keycloak Client Configuration (will be created in post-install step)
@@ -72,14 +76,16 @@ The following instructions are part of post-install step.
 
 #### Create a Realm
 
-1. In the top-left dropdown (currently showing "Master"), click **Create Realm**  
-2. **Realm name**: `dtaas` (or match the `KEYCLOAK_REALM` in `config/.env`)  
+1. In the top-left dropdown (currently showing "Master"), click
+   **Create Realm**  
+2. **Realm name**: `dtaas` (or match the realm named in
+   `KEYCLOAK_ISSUER_URL` in `config/.env`)  
 3. Click **Create**
 4. Click on **Realm Settings** -> **User Profile**
 5. Click on **Create attribute** with
    - name: profile
    - display name: profile
-   - Permission: **who can edit** ✅ on admin
+   - Permission: **who can edit** checked on admin
 6. Click **Create**
 
 #### Create Users
@@ -119,8 +125,8 @@ The following instructions are part of post-install step.
 5. Login settings:
    - **Root URL**: `https://intocps.org`
    - **Valid redirect URIs**:
-    - `https://intocps.org/_oauth/*`
-    - `https://intocps.org/*`
+     - `https://intocps.org/_oauth/*`
+     - `https://intocps.org/*`
    - **Valid post logout redirect URIs**: `https://intocps.org/*`
    - **Web origins**: `https://intocps.org`
    - Click **Save**
@@ -213,7 +219,8 @@ keycloak:
 
 ### Cannot Access Keycloak Admin Console
 
-- Ensure the Keycloak service is running: `docker compose --env-file config/.env ps`
+- Ensure the Keycloak service is running:
+  `docker compose --env-file config/.env ps`
 - Check Keycloak logs: `docker compose --env-file config/.env logs keycloak`
 - Verify port 80/443 is accessible
 
@@ -221,7 +228,7 @@ keycloak:
 
 - Verify `KEYCLOAK_ISSUER_URL` matches the realm name
 - Ensure redirect URIs in the Keycloak client include `/_oauth/*`
-- Confirm `COOKIE_DOMAIN` matches the domain
+- Confirm `SERVER_DNS` is correct (`COOKIE_DOMAIN` is derived from it)
 - Clear browser cookies and retry
 
 ### "Invalid Client" Error
@@ -248,11 +255,13 @@ To access custom user attributes:
 
 ### Role-Based Access Control (RBAC)
 
-RBAC is supported in Keycloak but not implemented in the traefik-forward-auth service by default.
+RBAC is supported in Keycloak but not implemented in the traefik-forward-auth
+service by default.
 
 ### Single Sign-On (SSO)
 
-Keycloak supports SSO across multiple applications. Configure additional clients for other services as needed.
+Keycloak supports SSO across multiple applications. Configure additional
+clients for other services as needed.
 
 ## References
 

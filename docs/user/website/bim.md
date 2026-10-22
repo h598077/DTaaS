@@ -17,12 +17,12 @@ documentation, covering what the route contains and what it leaves out, is in
 The page reads up to four files per model, all in the user's library under
 `common/models`. The page links to that folder above the viewer.
 
-| File | Required | What it holds |
-| --- | --- | --- |
-| `model.ifc` | yes | The building, as the authoring tool exported it |
-| `model.glb` | no | The geometry converted from the IFC file. The page writes it the first time the model is converted |
-| `model.json` | no | The property tree: every object, its IFC class, its storey, its property sets |
-| `model.manifest.json` | no | The binding manifest, mapping each sensor to the object it measures |
+| File                  | Required | What it holds                                                                                      |
+| --------------------- | -------- | -------------------------------------------------------------------------------------------------- |
+| `model.ifc`           | yes      | The building, as the authoring tool exported it                                                    |
+| `model.glb`           | no       | The geometry converted from the IFC file. The page writes it the first time the model is converted |
+| `model.json`          | no       | The property tree: every object, its IFC class, its storey, its property sets                      |
+| `model.manifest.json` | no       | The binding manifest, mapping each sensor to the object it measures                                |
 
 An IFC file on its own is enough to see the building. With the geometry file,
 the next visit loads the model instead of converting it again. The property
@@ -49,14 +49,15 @@ The model is converted to glTF binary, `.glb`. The issue offered OBJ as an
 alternative. OBJ was rejected because it cannot carry a stable identifier per
 object, which is the property the issue itself relies on.
 
-The binding key is the IFC `GlobalId`, a 22 character identifier that survives
-every export of the same model. glTF carries arbitrary data per node in its
-`extras` field, so the converter writes the `GlobalId` there and the viewer
-resolves a binding by reading it back. OBJ has no such field. A marker on an
-OBJ model can only be placed by node name, and names are not unique. Two walls
-are often both called `Wall`, and the resolver refuses that case instead of
-guessing which one the reading belongs to. A model without a stable identity
-per object cannot carry a binding that someone can review.
+The binding key is the IFC `GlobalId`, a 22-character identifier that the schema
+expects to stay the same across exports of the same model. glTF carries
+arbitrary data per node in its `extras` field, so the converter writes the
+`GlobalId` there and the viewer resolves a binding by reading it back. OBJ has
+no such field. A marker on an OBJ model can only be placed by node name, and
+names are not unique. Two walls are often both called `Wall`, and the resolver
+refuses that case instead of guessing which one the reading belongs to. A model
+without a stable identity per object cannot carry a binding that someone can
+review.
 
 ## The Binding Manifest
 
@@ -106,10 +107,10 @@ Four design decisions shape the format:
   raises an alert on the sensor card.
 
 A binding whose object is missing from the geometry is reported and counted.
-This happens routinely when a model is re-exported, because re-exporting
-changes every `GlobalId`. If the manifest asks for six markers and only four
-objects are found, the viewer says which two are missing instead of silently
-drawing four.
+This happens when an object is deleted and drawn again, or when the exporting
+tool does not keep the `GlobalId` and writes a new one. If the manifest asks for
+six markers and only four objects are found, the viewer says which two are
+missing instead of silently drawing four.
 
 ## Conversion
 
