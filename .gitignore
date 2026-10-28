@@ -269,3 +269,13 @@ gitlab_user_tokens.json
 # Git worktrees, including those Claude Code creates
 .worktrees/
 .claude/worktrees/
+deploy/dtaas/docker/localhost/files/user1/data/.gitkeep
+deploy/dtaas/docker/localhost/files/user1/digital_twins/.gitkeep
+deploy/dtaas/docker/localhost/files/user1/functions/.gitkeep
+deploy/dtaas/docker/localhost/files/user1/models/.gitkeep
+deploy/dtaas/docker/localhost/files/user1/tools/.gitkeep
+deploy/dtaas/docker/secure-server_with_integrated-gitlab/files/user1/data/.gitkeep
+deploy/dtaas/docker/secure-server_with_integrated-gitlab/files/user1/digital_twins/.gitkeep
+deploy/dtaas/docker/secure-server_with_integrated-gitlab/files/user1/functions/.gitkeep
+deploy/dtaas/docker/secure-server_with_integrated-gitlab/files/user1/models/.gitkeep
+deploy/dtaas/docker/secure-server_with_integrated-gitlab/files/user1/tools/.gitkeep
